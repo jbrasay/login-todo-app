@@ -7,14 +7,17 @@ import AddTodos from "../components/AddTodos";
 import ShowTodos from "../components/ShowTodos";
 import ToastContext from "../context/ToastContext";
 import FilterContext from "../context/FilterContext";
+import UserNameContext from "../context/UserNameContext";
 
 
 export default function Home() {
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
+    //const [username, setUsername] = useState("");
+    const {username} = useContext(UserNameContext);
     const {toast} = useContext(ToastContext);
     const [currentFilter, setCurrentFilter] = useState("All");
 
+    /*
     useEffect(() => {
         const verifyCookie = async () => {
             const {data} = await axios.post("http://localhost:5000/user/verify", {isTodo: false}, {withCredentials: true});
@@ -30,7 +33,7 @@ export default function Home() {
         }
         verifyCookie();
     }, [username])
-
+    */
 
     return  (
         <FilterContext.Provider value={{currentFilter, setCurrentFilter}}>

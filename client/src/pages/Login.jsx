@@ -5,11 +5,14 @@ import ShowToast from "../components/Toast/ShowToast";
 import {HiEye, HiEyeSlash} from "react-icons/hi2"
 import { Button, Label, TextInput } from "flowbite-react";
 import ToastContext from "../context/ToastContext";
+import TokenContext from "../context/TokenContext";
+import UserNameContext from "../context/UserNameContext";
 
 export default function Login() {
     const navigate = useNavigate();
     const {toast, toastDispatch} = useContext(ToastContext);
-
+    const {setUserName} = useContext(UserNameContext)
+    const {setHasToken} = useContext(TokenContext);
     const [showPassword, setShowPassword] = useState(false);
     const [inputValue, setInputValue] = useState({
         email: "",
@@ -17,6 +20,8 @@ export default function Login() {
     });
     const {email, password} = inputValue;
     
+
+    //Update input value
     const handleOnChange = (e) => {
         const {name, value} = e.target;
         setInputValue(prevInputValue => {
@@ -43,9 +48,12 @@ export default function Login() {
         try {
             
             const {data} = await axios.post("http://localhost:5000/user/login", {...inputValue}, {withCredentials: true});
-            const {success, message} = data;
+            console.log(data);
+            const {success, message, user} = data;
             //console.log(response);
             toastDispatch({type: "Show", success: success, message: message});
+            setHasToken(true);
+            setUserName(user.username)
             setTimeout(() => {
                 toastDispatch({type: "Hide"});
                 navigate("/");

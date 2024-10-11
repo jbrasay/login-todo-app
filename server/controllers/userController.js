@@ -14,7 +14,7 @@ const loginUser = async (req, res, next) => {
     }
     */
     try {
-        //Deconstruct email and password from the request body
+        //Unpack email and password from the request body
         const {email, password} = req.body;
 
         //Check if email and password field is not empty
@@ -44,7 +44,7 @@ const loginUser = async (req, res, next) => {
         });
         
         //Send success message
-        res.status(201).json({message: "User logged in successfully", success: true});
+        res.status(201).json({message: "User logged in successfully", success: true, user: user});
         //console.log("Email: " + email);
         //console.log("Password: " + password)
         next();
