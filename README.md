@@ -2,9 +2,11 @@
 
 This Todo application is a project designed to learn and practice the MERN stack (MongoDB, Express, React, Node.js). Users can create an account and log in, after which they can create, read, update, and delete their todos.
 
-<img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-login.png" width="200" height="200">
-<img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-signup.png" width="200" height="200">
-<img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-main.png" width="200" height="200">
+<p float="left">
+    <img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-login.png" width="400" height="400">
+    <img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-signup.png" width="400" height="400">
+    <img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-main.png" width="400" height="400">
+</p>
 
 ## Features
 
