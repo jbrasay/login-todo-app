@@ -5,6 +5,8 @@ This Todo application is a project designed to learn and practice the MERN stack
 <p float="left">
     <img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-login.png" width="400" height="400">
     <img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-signup.png" width="400" height="400">
+</p>
+<p align="middle">
     <img src="https://github.com/jbrasay/project-screenshots/blob/4f7dbee32772689b17f6e82411caedd6fdecd71f/screenshots/login-todo-app/todo-main.png" width="400" height="400">
 </p>
 
@@ -29,7 +31,7 @@ This Todo application is a project designed to learn and practice the MERN stack
 - **HTTP Client:** 
   - Axios
 - **Middleware:** 
-  - CORS For handling Cross-Origin requests
+  - CORS (For handling Cross-Origin requests)
   - cookie-parser (for handling cookies)
   - bcrypt (for hashing passwords)
   - jsonwebtoken (for creating web tokens)
