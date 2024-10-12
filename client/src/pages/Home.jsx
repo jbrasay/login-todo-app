@@ -2,7 +2,7 @@ import { useEffect, useReducer, useState, useContext} from "react";
 import { useNavigate } from "react-router-dom"
 import axios from "axios";
 import ShowToast from "../components/Toast/ShowToast";
-import MyNavBar from "../components/navbars/MyNavBar";
+import Header from "../components/navbars/Header";
 import AddTodos from "../components/AddTodos";
 import ShowTodos from "../components/ShowTodos";
 import ToastContext from "../context/ToastContext";
@@ -38,7 +38,7 @@ export default function Home() {
     return  (
         <FilterContext.Provider value={{currentFilter, setCurrentFilter}}>
             <div className="h-screen flex flex-col bg-gradient-to-r from-gray-300 to-slate-200">       
-                <MyNavBar username={username}/>
+                <Header username={username}/>
                 <div className="flex flex-col justify-center mx-auto h-1/6 w-1/6">
                     {toast.showToast && <ShowToast className=""/>}
                 </div>

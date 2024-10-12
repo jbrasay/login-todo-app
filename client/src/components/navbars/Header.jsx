@@ -3,7 +3,8 @@ import axios from "axios";
 import { useContext } from "react";
 import ToastContext from "../../context/ToastContext";
 import FilterContext from "../../context/FilterContext";
-export default function MyNavBar({username}) {
+
+export default function Header({username}) {
     const navigate = useNavigate();
     const {toast, toastDispatch} = useContext(ToastContext);
     const {currentFilter, setCurrentFilter} = useContext(FilterContext);
