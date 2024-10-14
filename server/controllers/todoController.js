@@ -1,12 +1,18 @@
 import todoModel from "../models/todoModel.js";
 import validator from "validator";
 
-//Get all todos for the specific user ID
+/**
+ * 
+ * @param {*} req From the client
+ * @param {*} res Send to the client
+ */
 const getAllTodos = async (req,res) => {
-    const userID = req.user._id;
+    //const userID = req.user._id;
+    const userID = req.user.id;
+    //console.log("USER ID: ", userID);
     //console.log(userID);
     try {
-        const todos = await todoModel.find({"userID": userID})
+        const todos = await todoModel.find({userID})
         res.status(200).json({success: true, data: todos});
         //res.status(200).json({success: true});
     } catch(error) {
@@ -16,10 +22,10 @@ const getAllTodos = async (req,res) => {
 
 //Add a todo for the specific user ID
 const addTodo = async (req, res) => {
-    console.log(req.user);
+    //console.log(req.user);
     //console.log(req.token);
 
-    const userID = req.user._id;
+    const userID = req.user.id;
     const {todoDesc, todoStatus} = req.body;
     //console.log(req.body);
 
@@ -37,6 +43,7 @@ const addTodo = async (req, res) => {
 };
 
 const removeTodo = async (req, res) => {
+    //Extract the todoID from request query
     const {todoID} = req.query;
     //console.log(todoID);
     try {

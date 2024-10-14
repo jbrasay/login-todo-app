@@ -1,16 +1,33 @@
+//Import react hooks, routers
 import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
-import ShowToast from "../components/Toast/ShowToast";
+
+//Import axios
+import axiosInstance from "../Axios/axios";
+
+//Import react icons
 import {HiEye, HiEyeSlash} from "react-icons/hi2"
 import { Button, Label, TextInput } from "flowbite-react";
+
+//Import Components
+import ShowToast from "../components/Toast/ShowToast";
+
+//Import Context
 import ToastContext from "../context/ToastContext";
+import UserAuthContext from "../context/UserAuthContext";
+
+//Import custom hooks
+import useTogglePassword from "../hooks/useTogglePassword";
+
+
 
 
 export default function Signup() {
     const navigate = useNavigate();
     const {toast, toastDispatch} = useContext(ToastContext);
-    const [showPassword, setShowPassword] = useState(false);
+    const [showPassword, {setTogglePassword}] = useTogglePassword();
+    const {userDispatch} = useContext(UserAuthContext);
+
     const [inputValue, setInputValue] = useState({
         email: "",
         username: "",
@@ -18,7 +35,7 @@ export default function Signup() {
     })
     const {email, username, password} = inputValue;
 
-    //Store user input entered from the input field
+    //Store user input entered from the input fields
     const handleOnChange = (e) => {
         const {name, value} = e.target;
         setInputValue(prevInputValue => {
@@ -30,35 +47,35 @@ export default function Signup() {
 
     }
 
-    //Reveal or hide password
-    const handleShowPassword = (e) => {
-        e.preventDefault();
-        if (showPassword) {
-            setShowPassword(false);
-        }
-        else {
-            setShowPassword(true);
-        }
-    }
-
+    /**
+     * Function for submitting user input
+     * Send request to the server to create user account on the database
+     * Store response access token to the session storage and user data to user reducer variable
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            //console.log(inputValue);
-            //Send cookies
-            const {data} = await axios.post("http://localhost:5000/user/signup", {...inputValue,}, { withCredentials: true });
-            const {success, message} = data;
+            const response = await axiosInstance.post("/user/signup", {...inputValue});
+            const {success, message, user, accessToken} = response.data;
+            
+            //Store access token in session storage
+            sessionStorage.setItem("accessToken", accessToken);
+            //Set user
+            userDispatch({type: "SET_USER", user})
+            
+            //Show Toast
             toastDispatch({type: "Show", success: success, message: message});
+
+            //Hide toast and go to the home page after 1 second
             setTimeout(() => {
                 toastDispatch({type: "Hide"});
                 navigate("/");
             }, 1000)
-            //console.log(data);
-        }catch(error) {
-            //console.log(error);           
+           
+        }catch(error) {         
             const { data } = error.response;
             const {success, message} = data;
-            //console.log(data);
+   
             toastDispatch({type: "Show", success: success, message: message});
         }
     }
@@ -86,7 +103,7 @@ export default function Signup() {
                         </div>
                         <div className="relative flex flex-row">
                             <TextInput className="w-screen" type={showPassword ? "text" : "password"} id="password" name="password" value={password} placeholder="Enter your password" onChange={handleOnChange}></TextInput>
-                            <button className="absolute right-2.5 inset-y-0" onClick={handleShowPassword}>{showPassword ? <HiEye/> : <HiEyeSlash/>}</button>
+                            <button className="absolute right-2.5 inset-y-0" onClick={setTogglePassword}>{showPassword ? <HiEye/> : <HiEyeSlash/>}</button>
                         </div>
                     </div>
                     <Button type="submit" className="bg-sky-500 w-28 m-auto mt-4 font-bold">Sign Up</Button>

@@ -1,19 +1,25 @@
+//Import react hooks, routers
 import { useContext, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import axios from "axios";
-import ShowToast from "../components/Toast/ShowToast";
+//Import axios instance
+import axiosInstance from "../Axios/axios";
+//Import React Icons
 import {HiEye, HiEyeSlash} from "react-icons/hi2"
+//Import flowbite-react Components
 import { Button, Label, TextInput } from "flowbite-react";
+//Import Components
+import ShowToast from "../components/Toast/ShowToast";
+//Import Context
 import ToastContext from "../context/ToastContext";
-import TokenContext from "../context/TokenContext";
-import UserNameContext from "../context/UserNameContext";
+import UserAuthContext from "../context/UserAuthContext"
+//Import custom hooks
+import useTogglePassword from "../hooks/useTogglePassword";
 
 export default function Login() {
     const navigate = useNavigate();
     const {toast, toastDispatch} = useContext(ToastContext);
-    const {setUserName} = useContext(UserNameContext)
-    const {setHasToken} = useContext(TokenContext);
-    const [showPassword, setShowPassword] = useState(false);
+    const {userDispatch} = useContext(UserAuthContext);
+    const [showPassword, {setTogglePassword}] = useTogglePassword();
     const [inputValue, setInputValue] = useState({
         email: "",
         password: "",
@@ -21,7 +27,7 @@ export default function Login() {
     const {email, password} = inputValue;
     
 
-    //Update input value
+    //Store user input entered from the input fields
     const handleOnChange = (e) => {
         const {name, value} = e.target;
         setInputValue(prevInputValue => {
@@ -31,35 +37,28 @@ export default function Login() {
             })
         })
     }
-    
-    const handleShowPassword = (e) => {
-        e.preventDefault();
-        if (showPassword) {
-            setShowPassword(false);
-        }
-        else {
-            setShowPassword(true);
-        }
-    }
 
     const handleSubmit = async function(e) {
+        //Prevent page from refreshing
         e.preventDefault();
         //console.log(inputValue);
         try {
-            
-            const {data} = await axios.post("http://localhost:5000/user/login", {...inputValue}, {withCredentials: true});
-            console.log(data);
-            const {success, message, user} = data;
+            const response = await axiosInstance.post("/user/login", {...inputValue});
+            //console.log("Data: ", data);
+            const {success, message, user, accessToken} = response.data;
+            sessionStorage.setItem('accessToken', accessToken);
+            userDispatch({type: "SET_USER", user});
             //console.log(response);
+
+            //Show toast  
             toastDispatch({type: "Show", success: success, message: message});
-            setHasToken(true);
-            setUserName(user.username)
+
             setTimeout(() => {
                 toastDispatch({type: "Hide"});
                 navigate("/");
             }, 1000)
         }catch(error) {
-            //console.log(error);
+            console.log(error);
             const { data } = error.response;
             const {success, message} = data;
             //console.log("Success: " + success);
@@ -68,6 +67,7 @@ export default function Login() {
         }
 
     }
+    //console.log("Session User: ",sessionUser);
 
     return (
         <div className="h-screen flex flex-col justify-center bg-gradient-to-r from-gray-300 to-slate-200">
@@ -86,7 +86,7 @@ export default function Login() {
                         </div>
                         <div className="relative flex flex-row">
                             <TextInput className="w-screen" type={showPassword ? "text" : "password"} id="password" name="password" value={password} placeholder="Enter your password" onChange={handleOnChange}></TextInput>
-                            <button className="absolute right-2.5 inset-y-0" onClick={handleShowPassword}>{showPassword ? <HiEye/> : <HiEyeSlash/>}</button>
+                            <button className="absolute right-2.5 inset-y-0" onClick={setTogglePassword}>{showPassword ? <HiEye/> : <HiEyeSlash/>}</button>
                         </div>
                     </div>
                     <Button type="submit" className="bg-sky-500 w-28 m-auto mt-4 font-bold">Login</Button>

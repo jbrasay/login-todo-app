@@ -8,7 +8,7 @@ import dotenv from "dotenv"
 dotenv.config();
 
 const app = express();
-//Cross origin
+//Cross origin access
 app.use(cors({
     //Allow request from the specified host
     origin: [process.env.CLIENT_HOST],

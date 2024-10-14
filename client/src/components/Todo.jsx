@@ -1,12 +1,16 @@
 import { TextInput, Button } from "flowbite-react";
 import { useContext, useState } from "react";
-import axios from "axios";
+
+
+import axiosInstance from "../Axios/axios";
+
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { MdOutlineCheckBox , MdOutlineCheckBoxOutlineBlank } from "react-icons/md";
 import { GiPencil } from "react-icons/gi";
 import { FaRegSave } from "react-icons/fa";
 import TodosContext from "../context/TodosContext";
 import ToastContext from "../context/ToastContext";
+
 
 
 export default function Todo({data, index}) {
@@ -16,15 +20,23 @@ export default function Todo({data, index}) {
     const {todosDispatch} = useContext(TodosContext);
     const {toastDispatch} = useContext(ToastContext);
 
-    //Change the status of the todo
+    /**
+     * Change the status of a todo to completed or active
+     */
     const handleChangeStatus = async () => {
         try {
+            /*
             const response = await axios.patch("http://localhost:5000/todo/changeTodoStatus", {
                 isTodo: true,
                 todoID: data._id,
                 todoStatus: !data.todoStatus
             }, {withCredentials: true})
-            console.log(response.data)
+            */
+           const response = await axiosInstance.patch("/todo/changeTodoStatus", {
+                todoID: data._id,
+                todoStatus: !data.todoStatus,
+           });
+            //console.log(response.data)
             const {message, success} = response.data;
             todosDispatch({type: "CHANGE_STATUS", todoID: data._id, todoStatus: data.todoStatus})
             toastDispatch({type:"Show", success: success, message: message});
@@ -33,18 +45,27 @@ export default function Todo({data, index}) {
         }
     }
 
-    //Change description of the todo
+    /**
+     * Edit the description of the todo
+     * Send an update to the database, then update the state containing the todo
+     */
     const handleEditing = async () => {
         //Editing is set to true, show save button. When clicked, update database and state
         if (isEditing && todoDescInput.length > 0) {
             try {
                 //Only update if description is changed
                 if (todoDescInput != data.todoDesc) {
+                    /*
                     const response = await axios.patch("http://localhost:5000/todo/changeTodoDesc", {
                         isTodo: true,
                         todoID: data._id,
                         todoDesc: todoDescInput
                     }, {withCredentials: true})
+                    */
+                   const response = await axiosInstance.patch("/todo/changeTodoDesc", {
+                        todoID: data._id,
+                        todoDesc: todoDescInput,
+                   });
                     const {message, success} = response.data;
                     //console.log(response.data);
                     todosDispatch({type: "CHANGE_DESC", todoID: data._id, todoDesc: todoDescInput })
@@ -61,9 +82,12 @@ export default function Todo({data, index}) {
         }
     }
 
-    //Remove todo from the database and state
+    /**
+     * Remove the todo from the database and from the todo state
+     */
     const handleRemoveTodo = async () => {
         try {
+            /*
             const response = await axios.delete("http://localhost:5000/todo/removeTodo", {
                 params:{
                     isTodo: true,
@@ -71,6 +95,12 @@ export default function Todo({data, index}) {
                 },
                 withCredentials: true,
             });
+            */
+           const response = await axiosInstance.delete("/todo/removeTodo", {
+                params: {
+                    todoID: data._id
+                }
+           });
             const {message, success} = response.data;
             todosDispatch({type:"REMOVE_TODO", todoID: data._id});
             toastDispatch({type:"Show", success: success, message: message});

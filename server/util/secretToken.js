@@ -2,8 +2,11 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv"
 dotenv.config();
 
-const createSecretToken = (id) => {
-    return jwt.sign({id}, process.env.TOKEN_KEY, {expiresIn: "1800s"});
+const createAccessToken = (id) => {
+    return jwt.sign({id}, process.env.AUTH_ACCESS_TOKEN_SECRET, {expiresIn: process.env.AUTH_ACCESS_TOKEN_EXPIRY});
 };
 
-export default createSecretToken;
+const createRefreshToken = (id) => {
+    return jwt.sign({id}, process.env.AUTH_REFRESH_TOKEN_SECRET, {expiresIn: process.env.AUTH_REFRESH_TOKEN_EXPIRY});
+}
+export {createAccessToken, createRefreshToken};

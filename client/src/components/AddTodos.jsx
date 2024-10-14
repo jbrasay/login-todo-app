@@ -1,29 +1,43 @@
-import { Button, TextInput } from "flowbite-react";
+//Import hooks, routers...
 import { useContext, useState } from "react";
-import axios from "axios";
+
+//import flowbite react components
+import { Button, TextInput } from "flowbite-react";
+
+//import axios instance
+import axiosInstance from "../Axios/axios";
+//Import context
 import ToastContext from "../context/ToastContext";
 import TodosContext from "../context/TodosContext";
+
 
 export default function AddTodos() {
     const [todoDesc, setTodoDesc] = useState("");
     const {toastDispatch} = useContext(ToastContext);
     const {todosDispatch} = useContext(TodosContext);
 
+    /**
+     * Handle submit
+     * Call the addTask function to submit new todo to the database and state
+     */
     const handleSubmit = async (e) => {
         e.preventDefault();
         addTask(todoDesc);
         setTodoDesc("");
 
     }
+    /**
+     * Function to add a new todo
+     * Send request to the add todo endpoint
+     */
     const addTask = async (todoToAdd) => {
-        console.log(todoDesc);
+        //console.log(todoDesc);
         try {
-            const {data} = await axios.post("http://localhost:5000/todo/addTodo", {
-                isTodo: true,
+           const response = await axiosInstance.post("/todo/addTodo", {
                 todoDesc: todoToAdd,
                 todoStatus: false,
-            }, {withCredentials: true});
-            const {message, success, resData} = data;
+           })
+            const {message, success, resData} = response.data;
             //console.log(resData);
             todosDispatch({type:"ADD_TODO", resData: resData});
             toastDispatch({type:"Show", success: success, message: message});

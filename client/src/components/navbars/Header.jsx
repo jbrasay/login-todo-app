@@ -1,21 +1,39 @@
 import {Link, useNavigate} from "react-router-dom"
-import axios from "axios";
 import { useContext } from "react";
+
+//import axios
+import axiosInstance from "../../Axios/axios";
+
+
+
+//Import Context
 import ToastContext from "../../context/ToastContext";
 import FilterContext from "../../context/FilterContext";
+import UserAuthContext from "../../context/UserAuthContext";
 
-export default function Header({username}) {
+
+export default function Header() {
     const navigate = useNavigate();
-    const {toast, toastDispatch} = useContext(ToastContext);
+    //const {username} = useContext(UserNameContext);
+    const {toastDispatch} = useContext(ToastContext);
+    const {sessionUser, accessToken} = useContext(UserAuthContext);
     const {currentFilter, setCurrentFilter} = useContext(FilterContext);
 
-    //Logout user, send a post to logout route to remove cookies and change page to the login screen
+    //console.log("HEADER Session User: ", sessionUser);
+    //console.log("HEADER Access Token: ", accessToken);
+
+    /**
+     * Logs off user, send a post to logout endpoint to remove cookies 
+     * Remove access token from session storage
+     * Change page to the login screen
+     */
     const logout = async () => {
         try {
-            const {data} = await axios.post("http://localhost:5000/user/logout", {}, {withCredentials: true});
-            const {message, success} = data;
+            const response = await axiosInstance.post("/user/logout"); 
+            const {message, success} = response.data;
             toastDispatch({type:"Show", success: success, message: message})
             setTimeout(() => {
+                sessionStorage.removeItem("accessToken");
                 toastDispatch({type: "Hide"});
                 navigate("/login");
             }, 1000)
@@ -24,7 +42,6 @@ export default function Header({username}) {
             const {success, message} = data;
             toastDispatch({type: "Show", success: success, message: message});
         }
-
      }
 
     return (
@@ -36,7 +53,7 @@ export default function Header({username}) {
                 <ul className="menu menu-horizontal">
                     <li>
                         <details>
-                            <summary className="text-xl">Welcome! <span className="font-bold text-red-700">{username}</span></summary>
+                            <summary className="text-xl">Welcome! <span className="font-bold text-red-700">{sessionUser.username}</span></summary>
                             <ul className="bg-white rounded-none w-40 p-2">
                                 <li><a className="btn btn-ghost text-lg font-normal" onClick={logout}>Log out</a></li>
                             </ul>

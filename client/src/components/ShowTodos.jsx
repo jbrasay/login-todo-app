@@ -1,30 +1,43 @@
-import { Outlet } from "react-router-dom";
-import axios from "axios";
-import FilterTodos from "./FilterTodos";
+//Import react hooks, routers
+import { Outlet, useNavigate } from "react-router-dom";
 import { useContext, useEffect } from "react";
+//Import axios instance
+import axiosInstance from "../Axios/axios";
+
+
+//Import components
+import FilterTodos from "./FilterTodos";
+
+//Import Context
 import TodosContext from "../context/TodosContext";
 
 
 export default function ShowTodos() {
-    const {todos, todosDispatch} = useContext(TodosContext);
+    const navigate = useNavigate();
+    const {todosDispatch} = useContext(TodosContext);
 
     //Initialize Todos
     useEffect(() => {
         const getTodos = async () => {
             try {
                 console.log("Fetching Todos");
+                /*
                 const {data} = await axios.get("http://localhost:5000/todo/getAllTodos", {
                     params:{
                         isTodo: true
                     },
                     withCredentials: true,
                 });
+                */
+                const {data} = await axiosInstance.get("/todo/getAllTodos")
                 //console.log(data);
                 todosDispatch({type: "SET_TODOS", payload: data.data });
                 
 
             } catch(error) {
-                console.log(error);
+                //console.log(error);
+                //Send user to the login screen if unable to renew access token
+                navigate("/login");
             }
         }
         getTodos();

@@ -5,19 +5,28 @@ dotenv.config();
 
 //Verify if user token is valid
 const userVerification = (req, res, next) => {
-    const token = req.cookies.token;
+    const token = req.cookies.refreshToken;
+    //const {Authorization} = req.headers;
+    //console.log("Authorization: ", Authorization);
+    //console.log("Headers: ",req.headers)
+    //const decode = jwt.decode(token);
+    //console.log("Current Time: " + Date.now());
+    //console.log("EXP:", decode);
     //console.log(req.query.isTodo);
+    
     const {isTodo} = req.body;
+    /*
     if (req.query.isTodo) {
         console.log("Params: " + req.query.isTodo);
     }
+    */
     //console.log(isTodo);
-    console.log(token);
+    //console.log(token);
     if (!token) {
-        return res.json({status: false, message:"No Token Found!"});
+        return res.status(401).json({status: false, message:"No Token Found!"});
     }
-    jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
-        //console.log(data);
+    jwt.verify(token, process.env.AUTH_REFRESH_TOKEN_SECRET, async (err, data) => {
+        //console.log("Verified: ", data);
         //Return false if token expired
         if (err) {
             return res.json({message: err.message, status: false});
@@ -26,7 +35,7 @@ const userVerification = (req, res, next) => {
             const user = await UserModel.findById(data.id);
             if (isTodo || req.query.isTodo) {
                 req.user = user;
-                console.log(user._id);
+                //console.log(user._id);
                 req.token = token;
                 next();
             }
