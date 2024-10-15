@@ -11,7 +11,7 @@ const app = express();
 //Cross origin access
 app.use(cors({
     //Allow request from the specified host
-    origin: [process.env.CLIENT_HOST],
+    origin: [process.env.CLIENT_HOST_URL],
     methods: ["GET", "PATCH","POST", "PUT", "DELETE"],
     credentials: true,
 }));

@@ -1,14 +1,15 @@
-import UserModel from "../models/UserModel.js";
 import jwt from "jsonwebtoken"
 import dotenv from "dotenv"
 dotenv.config();
 
 /**
- * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
- * @returns 
+ * This is a middleware for authenticating users
+ * Retrieve the access token from the header, check if expired
+ * Return an error code 403 if expired
+ * Go to the next function if access token has not expired
+ * @param {*} req From the client
+ * @param {*} res Response send to the next function of the endpoint
+ * @param {*} next Go to the next function of the endpoint
  */
 
 const userAuth = async (req, res, next) => {
@@ -26,10 +27,9 @@ const userAuth = async (req, res, next) => {
             res.status(403).json({message: "Invalid or expired access token", success: false})
         } 
         else {
-            //If Access token is still valid, store decoded token in req.user, then go to the next function
-            //req.user = user;
             //console.log(user._id);
-            console.log("Not Expired");
+            //console.log("Not Expired");
+            //If Access token is still valid, store decoded token in req.user, then go to the next function
             req.user = decoded;
             next();
         }

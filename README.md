@@ -61,7 +61,7 @@ This Todo application is a project designed to learn and practice the MERN stack
    npm install -D daisyui@latest
    
 
-4. Set up your environment variables for MongoDB. Create a .env file in the server directory and add your MongoDB connection string:
+4. Set up your environment variables. Create a .env file in the server directory and add the following variables:
 
    ```bash
    MONGODB_URI=your_mongodb_connection_string
@@ -70,9 +70,14 @@ This Todo application is a project designed to learn and practice the MERN stack
    AUTH_ACCESS_TOKEN_EXPIRY=your_access_token_expiration_time
    AUTH_REFRESH_TOKEN_SECRET=your_refresh_token_secret
    AUTH_REFRESH_TOKEN_EXPIRY=your_referesh_token_expiration_time
-   CLIENT_HOST=your_client_host
+   CLIENT_HOST_URL=your_client_host_url
    ```
- 
+   
+   Set up your environment variables for your frontend. Create a .env file in the client directory and add the following variables.
+   ```bash
+   VITE_BACK_END_URL=your_back_end_url
+   ```
+
    Note: You can generate a 32-byte string token key by running the command below on your terminal
    ```bash
    node

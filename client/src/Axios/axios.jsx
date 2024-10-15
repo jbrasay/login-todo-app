@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const BASE_URL = 'http://localhost:5000';
+
+const BASE_URL = import.meta.env.VITE_BACK_END_URL;
 
 //Create an Axios instance with a default base url and withCredentials set to true, to send refresh tokens to the server
 const axiosInstance = axios.create({
@@ -16,7 +17,7 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
     (config) => {
         const accessToken = sessionStorage.getItem("accessToken");
-        console.log("Interceptor");
+        //console.log("Interceptor");
         //console.log("Access Token: ", accessToken);
         if (accessToken) {
             //console.log("I have Access Token");
