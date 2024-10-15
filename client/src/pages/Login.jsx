@@ -38,31 +38,40 @@ export default function Login() {
         })
     }
 
+    /**
+     * Submit input to the server, login user if successful
+     * Show toast for error message
+     */
     const handleSubmit = async function(e) {
         //Prevent page from refreshing
         e.preventDefault();
         //console.log(inputValue);
         try {
+            //Send input value to the server
             const response = await axiosInstance.post("/user/login", {...inputValue});
             //console.log("Data: ", data);
-            const {success, message, user, accessToken} = response.data;
-            sessionStorage.setItem('accessToken', accessToken);
-            userDispatch({type: "SET_USER", user});
-            //console.log(response);
+            if (response) {
+                const {success, message, user, accessToken} = response.data;
+                sessionStorage.setItem('accessToken', accessToken);
+                userDispatch({type: "SET_USER", user});
+                //console.log(response);
 
-            //Show toast  
-            toastDispatch({type: "Show", success: success, message: message});
+                //Show toast  
+                toastDispatch({type: "Show", success: success, message: message});
 
-            setTimeout(() => {
-                toastDispatch({type: "Hide"});
-                navigate("/");
-            }, 1000)
-        }catch(error) {
-            console.log(error);
+                setTimeout(() => {
+                    toastDispatch({type: "Hide"});
+                    navigate("/");
+                }, 1000);
+            }
+        } catch(error) {
+            //console.log("Error: ", error);
+            //console.log("Status Code: ", error.response.status);
             const { data } = error.response;
             const {success, message} = data;
             //console.log("Success: " + success);
             //console.log("Message: " + message);
+            //Show error message as toast
             toastDispatch({type: "Show", success: success, message: message});
         }
 
@@ -84,6 +93,7 @@ export default function Login() {
                         <div className="my-2">
                             <Label htmlFor="password" className="text-lg font-normal">Password</Label>
                         </div>
+                        {/*Reveal password as text or hide password after clicking icon button. Change icon button depending on the show password state*/}
                         <div className="relative flex flex-row">
                             <TextInput className="w-screen" type={showPassword ? "text" : "password"} id="password" name="password" value={password} placeholder="Enter your password" onChange={handleOnChange}></TextInput>
                             <button className="absolute right-2.5 inset-y-0" onClick={setTogglePassword}>{showPassword ? <HiEye/> : <HiEyeSlash/>}</button>

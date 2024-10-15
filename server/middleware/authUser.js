@@ -15,14 +15,14 @@ const userAuth = async (req, res, next) => {
     const {authorization} = req.headers;
     //console.log("Header: ", authorization.split(" ")[1]);
     if (!authorization) {
-        return res.status(401).json({status: false, message:"No Access Token Found!"});
+        return res.status(403).json({status: false, message:"No Access Token Found!"});
     }
     const accessToken = authorization.split(" ")[1];
-    console.log("Access Token: ", accessToken);
+    //console.log("Access Token: ", accessToken);
     jwt.verify(accessToken, process.env.AUTH_ACCESS_TOKEN_SECRET, async (error, decoded) => {
         if (error) {
             //Handle invlaid or expired access token
-            console.log("Expired!");
+            //console.log("Expired!");
             res.status(403).json({message: "Invalid or expired access token", success: false})
         } 
         else {

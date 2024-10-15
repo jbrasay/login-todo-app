@@ -44,11 +44,9 @@ axiosInstance.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-
-        //console.log("ERROR CONFIG: ", error);
-        
         if (error.response && error.response.status === 403 && !originalRequest._retry) {
             originalRequest._retry = true;
+            console.log("Error Response: ", error.response);
             //console.log("ACCESS TOKEN EXPIRED!");
             try {
                 //console.log("Refresh Token");
@@ -63,7 +61,8 @@ axiosInstance.interceptors.response.use(
                 }
             } catch(error) {
                 //console.log(error)
-                //console.log("Could not renew access Token!");
+                //Return error if unable to refresh access token (Refresh token is expired, invalid, or not found)
+                return Promise.reject(error);
             }
         }
         return Promise.reject(error);

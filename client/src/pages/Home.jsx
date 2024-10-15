@@ -1,6 +1,5 @@
 //Import react hooks, routers
 import { useState, useContext} from "react";
-import { useNavigate } from "react-router-dom"
 //Import componentns
 import ShowToast from "../components/Toast/ShowToast";
 import Header from "../components/navbars/Header";
@@ -13,7 +12,6 @@ import FilterContext from "../context/FilterContext";
 
 
 export default function Home() {
-    const navigate = useNavigate();
     const {toast} = useContext(ToastContext);
     const [currentFilter, setCurrentFilter] = useState("All");
 

@@ -56,23 +56,24 @@ export default function Signup() {
         e.preventDefault();
         try {
             const response = await axiosInstance.post("/user/signup", {...inputValue});
-            const {success, message, user, accessToken} = response.data;
-            
-            //Store access token in session storage
-            sessionStorage.setItem("accessToken", accessToken);
-            //Set user
-            userDispatch({type: "SET_USER", user})
-            
-            //Show Toast
-            toastDispatch({type: "Show", success: success, message: message});
+            if (response) {
+                const {success, message, user, accessToken} = response.data;
+                //Store access token in session storage
+                sessionStorage.setItem("accessToken", accessToken);
+                //Set user
+                userDispatch({type: "SET_USER", user})
+                
+                //Show Toast
+                toastDispatch({type: "Show", success: success, message: message});
 
-            //Hide toast and go to the home page after 1 second
-            setTimeout(() => {
-                toastDispatch({type: "Hide"});
-                navigate("/");
-            }, 1000)
+                //Hide toast and go to the home page after 1 second
+                setTimeout(() => {
+                    toastDispatch({type: "Hide"});
+                    navigate("/");
+                }, 1000)
+            }
            
-        }catch(error) {         
+        }catch(error) {    
             const { data } = error.response;
             const {success, message} = data;
    

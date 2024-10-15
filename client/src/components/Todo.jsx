@@ -10,28 +10,25 @@ import { GiPencil } from "react-icons/gi";
 import { FaRegSave } from "react-icons/fa";
 import TodosContext from "../context/TodosContext";
 import ToastContext from "../context/ToastContext";
+import { useNavigate } from "react-router-dom";
 
 
 
 export default function Todo({data, index}) {
     //console.log(data);
+    const navigate = useNavigate();
     const [isEditing, setIsEditing] = useState(false);
     const [todoDescInput, setTodoDescInput] = useState(data.todoDesc);
     const {todosDispatch} = useContext(TodosContext);
     const {toastDispatch} = useContext(ToastContext);
+    
 
     /**
      * Change the status of a todo to completed or active
+     * Send a request to update the database, then update the state containing the todo
      */
     const handleChangeStatus = async () => {
         try {
-            /*
-            const response = await axios.patch("http://localhost:5000/todo/changeTodoStatus", {
-                isTodo: true,
-                todoID: data._id,
-                todoStatus: !data.todoStatus
-            }, {withCredentials: true})
-            */
            const response = await axiosInstance.patch("/todo/changeTodoStatus", {
                 todoID: data._id,
                 todoStatus: !data.todoStatus,
@@ -41,7 +38,9 @@ export default function Todo({data, index}) {
             todosDispatch({type: "CHANGE_STATUS", todoID: data._id, todoStatus: data.todoStatus})
             toastDispatch({type:"Show", success: success, message: message});
         } catch(error) {
-            console.log(error);
+            //console.log("Error: " , error);
+            handleLogOff(error.response.status);
+
         }
     }
 
@@ -55,13 +54,6 @@ export default function Todo({data, index}) {
             try {
                 //Only update if description is changed
                 if (todoDescInput != data.todoDesc) {
-                    /*
-                    const response = await axios.patch("http://localhost:5000/todo/changeTodoDesc", {
-                        isTodo: true,
-                        todoID: data._id,
-                        todoDesc: todoDescInput
-                    }, {withCredentials: true})
-                    */
                    const response = await axiosInstance.patch("/todo/changeTodoDesc", {
                         todoID: data._id,
                         todoDesc: todoDescInput,
@@ -73,9 +65,9 @@ export default function Todo({data, index}) {
                 }
                 setIsEditing(false);
             } catch(error) {
-                console.log(error);
+                //console.log(error);
+                handleLogOff(error.response.status);
             }
-            
         }
         else {
             setIsEditing(true);
@@ -83,19 +75,10 @@ export default function Todo({data, index}) {
     }
 
     /**
-     * Remove the todo from the database and from the todo state
+     * Remove the todo from the database and from the state todo variable
      */
     const handleRemoveTodo = async () => {
         try {
-            /*
-            const response = await axios.delete("http://localhost:5000/todo/removeTodo", {
-                params:{
-                    isTodo: true,
-                    todoID: data._id
-                },
-                withCredentials: true,
-            });
-            */
            const response = await axiosInstance.delete("/todo/removeTodo", {
                 params: {
                     todoID: data._id
@@ -107,7 +90,19 @@ export default function Todo({data, index}) {
             //console.log(response.data);
             //console.log(data._id)
         } catch (error) {
-            console.log(error);
+            //console.log(error);
+            handleLogOff(error.response.status);
+        }
+    }
+
+    /**
+     * Function to log off user if unable to refresh access token
+     */
+    const handleLogOff = (status) => {
+        if (status === 401) {
+            sessionStorage.removeItem("accessToken");
+            navigate("/login");
+            toastDispatch({type:"Show", success: false, message: "You have been logged off!"});
         }
     }
     

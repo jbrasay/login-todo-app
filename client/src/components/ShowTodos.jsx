@@ -20,29 +20,19 @@ export default function ShowTodos() {
     useEffect(() => {
         const getTodos = async () => {
             try {
-                console.log("Fetching Todos");
-                /*
-                const {data} = await axios.get("http://localhost:5000/todo/getAllTodos", {
-                    params:{
-                        isTodo: true
-                    },
-                    withCredentials: true,
-                });
-                */
+                //console.log("Fetching Todos");
                 const {data} = await axiosInstance.get("/todo/getAllTodos")
                 //console.log(data);
                 todosDispatch({type: "SET_TODOS", payload: data.data });
-                
-
             } catch(error) {
-                //console.log(error);
+                console.log("Error: ", error);
+                console.log("Status code: ", error.response.status)
                 //Send user to the login screen if unable to renew access token
                 navigate("/login");
             }
         }
         getTodos();
-
-    }, [])
+    },[])
     //console.log(todos);
     return (
         <div className="px-4 pb-10">
