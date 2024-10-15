@@ -1,5 +1,5 @@
 
-import UserModel from "../models/UserModel.js"; 
+import UserModel from "../models/userModel.js"; 
 import bcrypt from "bcrypt" 
 import validator from "validator"
 import jwt from "jsonwebtoken"
@@ -140,7 +140,7 @@ const signupUser = async (req, res, next) => {
  */
 const verifyCookie = async (req, res) => {
     const refreshCookie = req.cookies.refreshToken;
-    console.log("Refresh: ", refreshCookie)
+    //console.log("Refresh: ", refreshCookie)
     if (refreshCookie) {
         jwt.verify(refreshCookie, process.env.AUTH_REFRESH_TOKEN_SECRET, async (error, decoded) => {
             if (error) {
@@ -149,7 +149,7 @@ const verifyCookie = async (req, res) => {
             } 
             else {
                 //Generate a new access Token
-                console.log("Decoded: ", decoded);
+                //console.log("Decoded: ", decoded);
                 //const user = await UserModel.findById(decoded.id);
 
                 const accessToken = createAccessToken(decoded.id);
@@ -174,7 +174,7 @@ const verifyCookie = async (req, res) => {
  */
 const refreshToken = async (req, res) => {
     const refreshCookie = req.cookies.refreshToken;
-    console.log("Refresh Access: ", refreshCookie)
+    //console.log("Refresh Access: ", refreshCookie)
     if (refreshCookie) {
         jwt.verify(refreshCookie, process.env.AUTH_REFRESH_TOKEN_SECRET, async (error, decoded) => {
             if (error) {
