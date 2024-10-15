@@ -66,7 +66,11 @@ This Todo application is a project designed to learn and practice the MERN stack
    ```bash
    MONGODB_URI=your_mongodb_connection_string
    PORT=your_server_port
-   TOKEN=your_token_key
+   AUTH_ACCESS_TOKEN_SECRET=your_access_token_secret
+   AUTH_ACCESS_TOKEN_EXPIRY=your_access_token_expiration_time
+   AUTH_REFRESH_TOKEN_SECRET=your_refresh_token_secret
+   AUTH_REFRESH_TOKEN_EXPIRY=your_referesh_token_expiration_time
+   CLIENT_HOST=your_client_host
    ```
  
    Note: You can generate a 32-byte string token key by running the command below on your terminal
