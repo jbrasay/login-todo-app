@@ -53,6 +53,8 @@ const loginUser = async (req, res, next) => {
         res.cookie("refreshToken", refreshToken, {
             //withCredentials: true,
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
             expires: new Date(Date.now() + 86400000), //Expires in 24 hours
         });
         //when log in is successful return a 200 status code along with message, success status, the user object, and accessToken
@@ -117,6 +119,8 @@ const signupUser = async (req, res, next) => {
         res.cookie("refreshToken", refreshToken, {
             //withCredentials: true,
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
             expires: new Date(Date.now() + 86400000), //Expires in 24 hours
         });
 
