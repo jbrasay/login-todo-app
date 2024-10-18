@@ -31,7 +31,8 @@ export default function Header() {
         try {
             const response = await axiosInstance.post("/user/logout"); 
             const {message, success} = response.data;
-            toastDispatch({type:"Show", success: success, message: message})
+            //toastDispatch({type:"Show", success: success, message: message})
+            toastDispatch({type: "SHOW_INFINITE", success: true, message: message});
             setTimeout(() => {
                 sessionStorage.removeItem("accessToken");
                 toastDispatch({type: "Hide"});

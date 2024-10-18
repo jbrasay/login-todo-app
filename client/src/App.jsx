@@ -22,7 +22,7 @@ import UserAuthContext from './context/UserAuthContext';
 
 export default function App() {
     const navigate = useNavigate();
-    const [toast, toastDispatch] = useReducer(toastReducer, {showToast: false, success: false, message: ""});
+    const [toast, toastDispatch] = useReducer(toastReducer, {showToast: false, success: false, message: "", duration: 1000, showToggle: false, showInfinite: false});
     const [todos, todosDispatch] = useReducer(todosReducer, []);
     const [sessionUser, userDispatch] = useReducer(userReducer, {});
  

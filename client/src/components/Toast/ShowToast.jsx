@@ -6,9 +6,12 @@ import { useContext} from "react"
 export default function ShowToast() {
     const {toast, toastDispatch} = useContext(ToastContext);
     //Close the toast after 1 second
-    setTimeout(()=> {
-        toastDispatch({type: "Hide"});
-    }, 1000)
+    if (!toast.showToggle || !toast.showInfinite) {
+        setTimeout(()=> {
+            toastDispatch({type: "Hide"});
+        }, toast.duration)
+    }
+
     //Show toast
     return (
         <div>
@@ -20,6 +23,7 @@ export default function ShowToast() {
                     }
                 </div>
                 <div className="ml-3 text-sm font-normal">{toast.message}</div>
+                {toast.showToggle ? <Toast.Toggle/> : null}
             </Toast>
         </div>
     )

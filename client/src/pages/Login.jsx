@@ -46,7 +46,7 @@ export default function Login() {
         //Prevent page from refreshing
         e.preventDefault();
         //console.log(inputValue);
-        toastDispatch({type: "Show", success: true, message: "Logging In..."});
+        toastDispatch({type: "SHOW_INFINITE", success: true, message: "Logging In..."});
         try {
             //Send input value to the server
             const response = await axiosInstance.post("/user/login", {...inputValue});
