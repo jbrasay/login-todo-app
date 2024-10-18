@@ -6,7 +6,9 @@ export default function toastReducer(toast, action) {
                     ...toast,
                     showToast: true,
                     success: action.success,
-                    message: action.message
+                    message: action.message,
+                    showToggle: false,
+                    showInfinite: false
                 }
             )
         }

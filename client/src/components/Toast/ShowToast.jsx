@@ -6,7 +6,8 @@ import { useContext} from "react"
 export default function ShowToast() {
     const {toast, toastDispatch} = useContext(ToastContext);
     //Close the toast after 1 second
-    if (!toast.showToggle || !toast.showInfinite) {
+    if (!toast.showToggle && !toast.showInfinite) {
+        console.log("Not Infinite")
         setTimeout(()=> {
             toastDispatch({type: "Hide"});
         }, toast.duration)
